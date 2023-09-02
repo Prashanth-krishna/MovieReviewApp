@@ -28,9 +28,11 @@ namespace MovieReviewApp.Controllers
         [Route("create")]
         public async Task<IActionResult> Create(MovieReviewDTO review)
         {
+            ErrorViewModel errorViewModel;
             if (review == null)
             {
-                return View("Error");
+                errorViewModel = new ErrorViewModel { RequestId = "400" };
+                return View("Error", errorViewModel);
             }
             MovieReview newReview = new MovieReview { MovieReviewId = 0, MovieName = review.MovieName, ReviewComments = review.ReviewComments };
             await _repo.PostMovieReview(newReview);
@@ -39,7 +41,8 @@ namespace MovieReviewApp.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return View("Error");
+            errorViewModel = new ErrorViewModel { RequestId = "Database Error" };
+            return View("Error", errorViewModel);
         }
         [HttpGet]
         [Route("edit/{id:int}")]
@@ -48,7 +51,8 @@ namespace MovieReviewApp.Controllers
             var review = await _repo.GetMovieReviewAsync(id);
             if (review == null)
             {
-                return View("Error");
+                ErrorViewModel errorViewModel = new ErrorViewModel { RequestId = "404" };
+                return View("Error", errorViewModel);
             }
             return View(review);
         }
@@ -56,10 +60,12 @@ namespace MovieReviewApp.Controllers
         [Route("edit/{id:int}")]
         public async Task<IActionResult> Edit(int id, MovieReviewDTO newreview)
         {
+            ErrorViewModel errorViewModel;
             var oldreview = await _repo.GetMovieReviewAsync(id);
             if (oldreview == null)
             {
-                return View("Error");
+                errorViewModel = new ErrorViewModel { RequestId = "404" };
+                return View("Error", errorViewModel);
             }
             oldreview.MovieName = newreview.MovieName;
             oldreview.ReviewComments = newreview.ReviewComments;
@@ -70,7 +76,8 @@ namespace MovieReviewApp.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return View("Error");
+            errorViewModel = new ErrorViewModel { RequestId = "Database Error" };
+            return View("Error", errorViewModel);
         }
         [HttpGet]
         [Route("delete/{id:int}")]
@@ -79,7 +86,8 @@ namespace MovieReviewApp.Controllers
             var review = await _repo.GetMovieReviewAsync(id);
             if (review == null)
             {
-                return View("Error");
+                ErrorViewModel errorViewModel = new ErrorViewModel { RequestId = "404" };
+                return View("Error", errorViewModel);
             }
             return View(review);
         }
@@ -98,7 +106,8 @@ namespace MovieReviewApp.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return View("Error");
+            ErrorViewModel errorViewModel = new ErrorViewModel { RequestId = "Database Error" };
+            return View("Error", errorViewModel);
 
         }
         [HttpGet]
@@ -108,7 +117,8 @@ namespace MovieReviewApp.Controllers
             var review = await _repo.GetMovieReviewAsync(id);
             if (review == null)
             {
-                return View("Error");
+                ErrorViewModel errorViewModel = new ErrorViewModel { RequestId = "404" };
+                return View("Error", errorViewModel);
             }
             return View(review);
         }
